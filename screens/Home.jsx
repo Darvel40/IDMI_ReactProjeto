@@ -11,10 +11,10 @@ export default function Home() {
 
     return (
         <View style={styles.container}>
-        <Segundo/>
-        <Counter/>
-        <Button title='Settings' onPress={() => navigation.navigate("Settings")}></Button>
-        <StatusBar style="auto" />
+          <Segundo/>
+          <Counter/>
+          <Button title='Settings' onPress={() => navigation.navigate("Settings")}></Button>
+          <StatusBar style="auto" />
         </View>
     );
 }
