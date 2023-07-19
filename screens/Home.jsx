@@ -1,20 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Segundo from '../Segundo';
-import Counter from '../Counter';
-import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
 
 export default function Home() {
 
-    const navigation = useNavigation();
-
     return (
         <View style={styles.container}>
-          <Segundo/>
-          <Counter/>
-          <Button title='Settings' onPress={() => navigation.navigate("Settings")}></Button>
-          <StatusBar style="auto" />
+          <Text style={styles.text}>Filipe Lisboa</Text>
+          <Text style={styles.text3}>N° 2022266</Text>
+          <Text style={styles.text2}>Trabalho React Native</Text>
         </View>
     );
 }
@@ -22,8 +15,21 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  text2: {
+    fontSize: 30,
+    marginBottom: 20,
+  },
+  text3: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });

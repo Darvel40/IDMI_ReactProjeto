@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
+import { getBoardSize } from '../store';
 
 const Jogo = () => {
-    const { COLUMN_COUNT, ROW_COUNT } = useSelector(state => state);
+    const { columnCount, rowCount } = useSelector(getBoardSize);
     const WINNING_LENGTH = 4;
 
     const createBoard = () => {
-        return Array.from(Array(ROW_COUNT), () => Array(COLUMN_COUNT).fill(0));
+        return Array.from(Array(rowCount), () => Array(columnCount).fill(0));
     };
+
+    useEffect(() => {
+        setBoard(createBoard(columnCount, rowCount));
+        setCurrentPlayer(1);
+    }, [columnCount, rowCount]);
 
     const checkForWin = (board, player) => {
         // Verificar vitória horizontal
-        for (let row = 0; row < ROW_COUNT; row++) {
-            for (let col = 0; col <= COLUMN_COUNT - WINNING_LENGTH; col++) {
+        for (let row = 0; row < rowCount; row++) {
+            for (let col = 0; col <= columnCount - WINNING_LENGTH; col++) {
                 if (
                     board[row][col] === player &&
                     board[row][col + 1] === player &&
@@ -26,8 +32,8 @@ const Jogo = () => {
         }
 
         // Verificar vitória vertical
-        for (let row = 0; row <= ROW_COUNT - WINNING_LENGTH; row++) {
-            for (let col = 0; col < COLUMN_COUNT; col++) {
+        for (let row = 0; row <= rowCount - WINNING_LENGTH; row++) {
+            for (let col = 0; col < columnCount; col++) {
                 if (
                     board[row][col] === player &&
                     board[row + 1][col] === player &&
@@ -40,8 +46,8 @@ const Jogo = () => {
         }
 
         // Verificar vitória na diagonal (esquerda para direita)
-        for (let row = 0; row <= ROW_COUNT - WINNING_LENGTH; row++) {
-            for (let col = 0; col <= COLUMN_COUNT - WINNING_LENGTH; col++) {
+        for (let row = 0; row <= rowCount - WINNING_LENGTH; row++) {
+            for (let col = 0; col <= columnCount - WINNING_LENGTH; col++) {
                 if (
                     board[row][col] === player &&
                     board[row + 1][col + 1] === player &&
@@ -54,8 +60,8 @@ const Jogo = () => {
         }
 
         // Verificar vitória na diagonal (direita para esquerda)
-        for (let row = 0; row <= ROW_COUNT - WINNING_LENGTH; row++) {
-            for (let col = WINNING_LENGTH - 1; col < COLUMN_COUNT; col++) {
+        for (let row = 0; row <= rowCount - WINNING_LENGTH; row++) {
+            for (let col = WINNING_LENGTH - 1; col < columnCount; col++) {
                 if (
                     board[row][col] === player &&
                     board[row + 1][col - 1] === player &&
@@ -75,7 +81,7 @@ const Jogo = () => {
 
     const handleSquarePress = (row, col) => {
         const updatedBoard = [...board];
-        for (let rowIndex = ROW_COUNT - 1; rowIndex >= 0; rowIndex--) {
+        for (let rowIndex = rowCount - 1; rowIndex >= 0; rowIndex--) {
             if (updatedBoard[rowIndex][col] === 0) {
                 updatedBoard[rowIndex][col] = currentPlayer;
 
