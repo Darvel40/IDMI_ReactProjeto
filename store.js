@@ -10,9 +10,19 @@ export const setBoardSize = (columnCount, rowCount) => ({
   },
 });
 
+// Ação para adicionar um histórico de vitórias
+export const addVictoryHistory = (winner, timestamp) => ({
+  type: 'ADD_VICTORY_HISTORY',
+  payload: {
+    winner,
+    timestamp,
+  },
+});
+
 const initialState = {
   columnCount: 7,
   rowCount: 6,
+  victoryHistory: [],
 };
 
 // Redutor
@@ -23,6 +33,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         columnCount: action.payload.columnCount,
         rowCount: action.payload.rowCount,
+      };
+    case 'ADD_VICTORY_HISTORY':
+      return {
+        ...state,
+        victoryHistory: [...state.victoryHistory, action.payload],
       };
     default:
       return state;

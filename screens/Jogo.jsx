@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native';
-import { useSelector } from 'react-redux';
-import { getBoardSize } from '../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { getBoardSize, addVictoryHistory  } from '../store';
+import { Dialog, Portal, Button } from 'react-native-paper';
 
 const Jogo = () => {
+    const dispatch = useDispatch();
     const { columnCount, rowCount } = useSelector(getBoardSize);
     const WINNING_LENGTH = 4;
 
@@ -78,6 +80,15 @@ const Jogo = () => {
 
     const [board, setBoard] = useState(createBoard());
     const [currentPlayer, setCurrentPlayer] = useState(1);
+    const [dialogVisible, setDialogVisible] = useState(false);
+    const [dialogEmpateVisible, setDialogEmpateVisible] = useState(false);
+
+    const onDialogDismiss = () => {
+        setDialogVisible(false);
+        setDialogEmpateVisible(false);
+        setBoard(createBoard());
+        setCurrentPlayer(1);
+      };
 
     const handleSquarePress = (row, col) => {
         const updatedBoard = [...board];
@@ -87,12 +98,12 @@ const Jogo = () => {
 
                 if (checkForWin(updatedBoard, currentPlayer)) {
                     if (currentPlayer === 1) {
-                        Alert.alert(`Jogador Azul Ganhou!`);
+                        setDialogVisible(true);
+                        dispatch(addVictoryHistory(1, new Date().toISOString()));
                     } else if (currentPlayer === 2) {
-                        Alert.alert(`Jogador Vermelho Ganhou!`);
+                        setDialogVisible(true);
+                        dispatch(addVictoryHistory(2, new Date().toISOString()));
                     }
-                    setBoard(createBoard());
-                    setCurrentPlayer(1);
                     return;
                 }
 
@@ -101,7 +112,7 @@ const Jogo = () => {
         }
 
         if (updatedBoard.every((row) => row.every((cell) => cell !== 0))) {
-            Alert.alert('Empate!');
+            setDialogEmpateVisible(true);
             setBoard(createBoard());
             setCurrentPlayer(1);
             return;
@@ -142,6 +153,26 @@ const Jogo = () => {
                 É a vez do jogador {currentPlayer === 1 ? 'Azul' : 'Vermelho'}
             </Text>
             <View style={styles.board}>{board.map((_, row) => renderRow(row))}</View>
+            <Portal>
+                <Dialog visible={dialogVisible} onDismiss={onDialogDismiss}>
+                <Dialog.Title>
+                    O Jogador {currentPlayer === 1 ? 'Azul' : 'Vermelho'} Ganhou!
+                </Dialog.Title>
+                <Dialog.Actions>
+                    <Button onPress={onDialogDismiss}>Fechar</Button>
+                </Dialog.Actions>
+                </Dialog>
+            </Portal>
+            <Portal>
+                <Dialog visible={dialogEmpateVisible} onDismiss={onDialogDismiss}>
+                <Dialog.Title>
+                    Empate!
+                </Dialog.Title>
+                <Dialog.Actions>
+                    <Button onPress={onDialogDismiss}>Fechar</Button>
+                </Dialog.Actions>
+                </Dialog>
+            </Portal>
         </View>
     );
 };

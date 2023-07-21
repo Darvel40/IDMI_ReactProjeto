@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { TextInput, Button, Title, HelperText } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBoardSize } from '../store';
-import { getBoardSize } from '../store';
+import { setBoardSize, getBoardSize } from '../store';
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -53,67 +52,61 @@ const Settings = () => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={{ marginBottom: 15, marginLeft: 15, alignItems: 'center', flexDirection: 'row' }}>
+    <View style={styles.container}>
+      <View style={styles.container2}>
         <Title>Colunas:</Title>
         <TextInput
           mode='outlined'
           value={newColumnCount}
           onChangeText={text => setNewColumnCount(text)}
           keyboardType="numeric"
-          style={{ marginLeft: 15, height: 50, width: 50}}
+          style={styles.textinput}
         />
-        <HelperText type="error">{columnError}</HelperText>
+        
       </View>
-      <View style={{ marginBottom: 15, marginLeft: 15, alignItems: 'center', flexDirection: 'row' }}>
+      <HelperText type="error">{columnError}</HelperText>
+      <View style={styles.container2}>
         <Title>Linhas:</Title>
         <TextInput
           mode='outlined'
           value={newRowCount}
           onChangeText={text => setNewRowCount(text)}
           keyboardType="numeric"
-          style={{ marginLeft: 28, height: 50, width: 50}}
+          style={styles.textinput2}
         />
-        <HelperText type="error">{rowError}</HelperText>
+        
       </View>
-      <Button mode="contained" onPress={handleSaveChanges} style={{ width: 230}} buttonColor='blue'>Salvar alterações</Button>
+      <HelperText type="error">{rowError}</HelperText>
+      <Button mode="contained" onPress={handleSaveChanges} style={styles.button} buttonColor='blue'>Salvar alterações</Button>
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center'
   },
-  inputContainer: {
-    marginBottom: 15,
+  container2: {
+    marginBottom: 15, 
+    marginLeft: 15, 
+    alignItems: 'center', 
+    flexDirection: 'row'
   },
-  label: {
-    fontSize: 18,
-    marginBottom: 5,
+  textinput: {
+    marginLeft: 15,  
+    height: 50, 
+    width: 50
   },
-  input: {
-    width: 150,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 5,
-    fontSize: 16,
+  textinput2: {
+    marginLeft: 28, 
+    height: 50, 
+    width: 50
   },
   button: {
-    backgroundColor: 'blue',
-    color: 'white',
-    fontSize: 18,
-    padding: 10,
-    borderRadius: 5,
+    width: 230
   },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-};
+});
 
 export default Settings;
